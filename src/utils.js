@@ -30,7 +30,19 @@ const readFileAsync = async filePath => {
   });
 };
 
+const mkdirAsync = async path => {
+  return new Promise((resolve, reject) => {
+    fs.mkdir(path, { recursive: true }, err => {
+      if (err) {
+        reject(err);
+      }
+      resolve();
+    });
+  });
+};
+
 module.exports = {
   readDirAsync,
   readFileAsync,
-}
+  mkdirAsync,
+};

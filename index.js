@@ -1,87 +1,35 @@
-const fontCarrier = require("font-carrier");
-const fs = require("fs");
-const wideTraversalIcons = require("./wideTraversalIcons");
-const { readFileAsync } = require("./utils");
-const MAX_UNICODE_NUM = 1048576;
-const { resolve } = require('./src/path');
+const { compilation, make, watchRun } = require('./src/hooks');
+const { error } = require('./src/log');
+const { DEFAULT_OUTPUT, DEFAULT_OPTIONS } = require('./src/constant');
 
-const matchIconsList = async (assetsPath) => {
-  return await wideTraversalIcons(assetsPath);
-};
-
-const font = fontCarrier.create();
-const startUnicodeHex = "e601";
-
-const createProcess = async (assetsPath, outputPath) => {
-  const iconList = await matchIconsList(assetsPath);
-  for (let i = 0; i < iconList.length; i++) {
-    const svgPath = `${assetsPath}/${iconList[i].oppositePath}`;
-    const cSvg = fs.readFileSync(svgPath).toString();
-
-    // Translate from HEX
-    const HEX2Decimal = parseInt(startUnicodeHex, 16);
-
-    // check if over above maximum unicode number
-    if (HEX2Decimal >= MAX_UNICODE_NUM) {
-      throw new Error("Exceeds the maximum unicode number");
-    }
-
-    // Decimal auto-increment, translate to HEX
-    const HEXCode = Number(HEX2Decimal + i).toString(16);
-    console.log("HEXCode=", HEXCode);
-
-    // set Unicode
-    font.setSvg(`&#x${HEXCode};`, cSvg);
+const transactionHOF = function(f, ...args) {
+  if (typeof f !== 'function') {
+    throw new Error('hof argument function expected ');
   }
-
-  font.output({
-    path: outputPath,
-  });
+  return f(...args).bind(this);
 };
 
 module.exports = class Svg2IconfontWebpack {
-  constructor(props = {}) {
-    this.init(props);
+  constructor(options = {}) {
+    this.init({
+      ...DEFAULT_OPTIONS,
+      ...options,
+    });
   }
 
-  init (props) {
-    const { assetsPath = null, outputPath = null } = props;
-    this.assetsPath = assetsPath;
-    this.outputPath = outputPath;
+  init(options) {
+    const { output = DEFAULT_OUTPUT } = options;
+    this.options = options;
+    this.options.output = Object.assign(DEFAULT_OUTPUT, output);
   }
 
   apply(compiler) {
-    compiler.hooks.watchRun.tap("Svg2IconfontWebpack", async () => {
-      await createProcess(this.assetsPath, this.outputPath);
-    });
+    compiler.hooks.watchRun.tap('Svg2IconfontWebpack', transactionHOF(watchRun, this.options));
 
-    compiler.hooks.compilation.tap("Svg2IconfontWebpack", compilation => {
-      console.log("The compiler is starting a new compilation...");
+    compiler.hooks.compilation.tap('Svg2IconfontWebpack', transactionHOF(compilation, this.options));
 
-      compilation.plugin("html-webpack-plugin-before-html-processing", data => {
-        data.assets.css.push("/css/main.css");
-        return Promise.resolve(data);
-      });
-    });
+    compiler.hooks.make.tap('Svg2IconfontWebpack', transactionHOF(make, this.options));
 
-    compiler.hooks.make.tap("Svg2IconfontWebpack", async compilation => {
-      compilation.hooks.additionalAssets.tapAsync(
-        "Svg2IconfontWebpack",
-        async cb => {
-          const fileContent = await readFileAsync(
-            resolve("../iconWebpack/template/temp.css")
-          );
-          compilation.assets["css/main.css"] = {
-            source: () => {
-              return fileContent;
-            },
-            size: () => {
-              return Buffer.byteLength(fileContent, "utf-8");
-            }
-          };
-          cb();
-        }
-      );
-    });
+    compiler.hooks.invalid.tap('Svg2IconfontWebpack', e => error(e));
   }
 };
