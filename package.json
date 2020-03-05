@@ -1,0 +1,19 @@
+{
+  "name": "svg2iconfont-webpack",
+  "version": "1.0.0",
+  "description": "a webpack plugin for svg to iconfont",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xdnloveme/Svg2Iconfont-webpack.git"
+  },
+  "author": "Tanghy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xdnloveme/Svg2Iconfont-webpack/issues"
+  },
+  "homepage": "https://github.com/xdnloveme/Svg2Iconfont-webpack#readme"
+}
