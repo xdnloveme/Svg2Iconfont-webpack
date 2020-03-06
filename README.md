@@ -43,5 +43,5 @@ module.exports = {
 
 # LICENSE
 
-#### [MIT](https://github.com/xdnloveme/Svg2Iconfont-webpack/blob/master/LICENSE)
+### [MIT](https://github.com/xdnloveme/Svg2Iconfont-webpack/blob/master/LICENSE)
 

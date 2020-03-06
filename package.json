@@ -1,6 +1,6 @@
 {
   "name": "svg2iconfont-webpack",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "a webpack plugin for svg to iconfont",
   "main": "index.js",
   "scripts": {
@@ -18,6 +18,13 @@
   "homepage": "https://github.com/xdnloveme/Svg2Iconfont-webpack#readme",
   "dependencies": {
     "chalk": "^3.0.0",
-    "font-carrier": "^0.2.0"
-  }
+    "font-carrier": "^0.2.0",
+    "postcss": "^7.0.27",
+    "postcss-js": "^2.0.3"
+  },
+  "keywords": [
+    "webpack",
+    "iconfont",
+    "svg"
+  ]
 }

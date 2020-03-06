@@ -13,4 +13,8 @@ module.exports = {
     assetsPath: null,
     output: DEFAULT_OUTPUT,
   },
+  DEFAULT_FONT_OPTIONS: {
+    fontSize: 32,
+    fontFamily: 'iconfont',
+  }
 };

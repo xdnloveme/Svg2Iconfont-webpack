@@ -1,13 +1,36 @@
-const { resolve } = require('../path');
-const { readFileAsync } = require('../utils');
 const { error } = require('../log');
+const cssBuilder = require('../css/builder');
+const { success } = require('../log');
+
+const fontOuput = (cacheBuffers, compilation, outputOptions) => {
+  const { fileName } = outputOptions;
+
+  Object.keys(cacheBuffers).forEach(suffix => {
+    compilation.assets[`css/${fileName}.${suffix}`] = {
+      source: () => {
+        return cacheBuffers[suffix];
+      },
+      size: () => {
+        return Buffer.byteLength(cacheBuffers[suffix]);
+      },
+    };
+  });
+
+  success(`${Object.keys(cacheBuffers).join(',')} built successfully!`)
+};
 
 module.exports = options => {
-  return async compilation => {
+  return async function(compilation) {
+    const self = this;
     try {
       const { output } = options;
       compilation.hooks.additionalAssets.tapAsync('Svg2IconfontWebpack', async cb => {
-        const fileContent = await readFileAsync(resolve('./template/temp.css'));
+
+        // output font libs
+        fontOuput(self.cacheBuffers, compilation, output);
+
+        const cssResult = await cssBuilder(options);
+        const fileContent = cssResult.css;
         compilation.assets[`css/${output.cssFileName}.css`] = {
           source: () => {
             return fileContent;
@@ -16,6 +39,9 @@ module.exports = options => {
             return Buffer.byteLength(fileContent, 'utf-8');
           },
         };
+
+        success(`${output.cssFileName}.css built successfully!`);
+        
         cb();
       });
     } catch (e) {
