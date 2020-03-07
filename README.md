@@ -1,5 +1,18 @@
 # Svg2Iconfont-webpack
-a webpack plugin for svg to iconfont.
+A webpack plugin for svg transform to iconfont automatically.🎉
+
+# why use?
+
+English:
+
+1. You can **package all svg files** to **iconfont** bundle.
+2. You can use it in your code by **setting ClassName(the same as filename)**  directly **without any import or require**.
+3. All process is automatic, you don't care about anything;
+
+中文:
+
+1. 你可以根据**指定资源路径**，打包所有的svg文件，统一生成一份iconfont文件
+2. 整个流程都是**自动的**，统一生成的文件也是**自动引入的**，你不用另外的import或者require，你只需要启动你的项目(npm start)，即可在你的代码里**对应文件名直接设置ClassName**，即可显示ICON图标。
 
 # Getting Started
 First of all, install the module:
@@ -53,7 +66,7 @@ module.exports = {
 
 ```
 
-And you can show the icons by setting ClassName(From Filename), the same name from Filename, including the path,but formating to '-' sign.
+And you can show the icons by setting **ClassName(From Filename)**, the same name from Filename, including the path,**but format to '-' sign**.
 
 ```html
 <!-- 你可以通过设置你对应svg文件的文件名（不带svg后缀名），来达到显示图标的目的，注意，如果你的文件是嵌套在文件夹里面的，请输入文件夹 + 文件名的方式来对应显示，分隔符是“-”而不是“/” -->
@@ -62,11 +75,11 @@ And you can show the icons by setting ClassName(From Filename), the same name fr
 <i class="my-icon-file-name icon-iconfont"></i>
 ```
 
-Then you will see ICON appeared:
+Then you will see **ICON appeared**:
 
 ![plugin-desc](https://github.com/xdnloveme/MarkdownPictureStore/blob/master/plugin-desc.png)
 
-OR You can set  its unicode by your own className(First, you should know the ICON's unicode)
+OR You can set  its unicode by your own className(**First, you should know the ICON's unicode**)
 
 ```html
 <!-- add class "icon-iconfont" -->
