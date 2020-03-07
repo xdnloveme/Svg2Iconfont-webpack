@@ -1,5 +1,5 @@
 # Svg2Iconfont-webpack
-A webpack plugin for svg transform to iconfont automatically.🎉
+A webpack plugin for **svg transform to iconfont** automatically.🎉
 
 # why use?
 
