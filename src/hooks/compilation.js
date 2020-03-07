@@ -5,6 +5,7 @@ module.exports = options => {
     try {
       const { output } = options;
       compilation.plugin('html-webpack-plugin-before-html-processing', data => {
+        // html assets
         data.assets.css.push(`/css/${output.cssFileName}.css`);
         return Promise.resolve(data);
       });

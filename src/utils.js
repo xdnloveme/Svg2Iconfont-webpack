@@ -30,6 +30,7 @@ const readFileAsync = async filePath => {
   });
 };
 
+// 异步创建文件夹
 const mkdirAsync = async path => {
   return new Promise((resolve, reject) => {
     fs.mkdir(path, { recursive: true }, err => {

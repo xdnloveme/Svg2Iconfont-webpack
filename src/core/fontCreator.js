@@ -19,22 +19,27 @@ const fontCreator = async (assetsPath, output) => {
     throw new Error('options: output path required');
   }
 
+  // get iconList && set iconList cachce
   const iconList = await matchIconsList(assetsPath);
+
   for (let i = 0; i < iconList.length; i++) {
-    const svgPath = `${assetsPath}/${iconList[i].oppositePath}`;
+    const current = iconList[i];
+
+    const svgPath = `${assetsPath}/${current.oppositePath}`;
     const cSvg = fs.readFileSync(svgPath).toString();
 
     // Translate from HEX
     const HEX2Decimal = parseInt(startUnicodeHex, 16);
 
     // check if over above maximum unicode number
-    if (HEX2Decimal >= MAX_UNICODE_NUM) {
+    if ((HEX2Decimal + i) >= MAX_UNICODE_NUM) {
       throw new Error('Exceeds the maximum unicode number');
     }
 
     // Decimal auto-increment, translate to HEX
     const HEXCode = Number(HEX2Decimal + i).toString(16);
-    // console.log('HEXCode=', HEXCode);
+
+    current['unicode'] = `0${HEXCode}`;
 
     // set Unicode
     font.setSvg(`&#x${HEXCode};`, cSvg);
@@ -42,10 +47,11 @@ const fontCreator = async (assetsPath, output) => {
 
   await mkdirAsync(output.path);
 
-  // font.output({
-  //   path: outputPathComputed,
-  // });
-  return font.output();
+  const buffers = font.output();
+  return {
+    buffers,
+    iconList,
+  }
 };
 
 module.exports = fontCreator;

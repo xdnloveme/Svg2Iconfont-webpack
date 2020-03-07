@@ -21,15 +21,17 @@ const fontOuput = (cacheBuffers, compilation, outputOptions) => {
 
 module.exports = options => {
   return async function(compilation) {
-    const self = this;
+    const context = this;
     try {
       const { output } = options;
       compilation.hooks.additionalAssets.tapAsync('Svg2IconfontWebpack', async cb => {
 
         // output font libs
-        fontOuput(self.cacheBuffers, compilation, output);
+        fontOuput(context.cacheBuffers, compilation, output);
 
-        const cssResult = await cssBuilder(options);
+        const cssResult = await cssBuilder.call(context, options);
+
+        // get CSS file content
         const fileContent = cssResult.css;
         compilation.assets[`css/${output.cssFileName}.css`] = {
           source: () => {
@@ -41,7 +43,7 @@ module.exports = options => {
         };
 
         success(`${output.cssFileName}.css built successfully!`);
-        
+
         cb();
       });
     } catch (e) {
