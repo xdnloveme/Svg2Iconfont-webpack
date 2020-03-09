@@ -14,7 +14,7 @@ module.exports = class Svg2IconfontWebpack {
     info('constructor... prepare to compiling...')
     this.init({
       ...DEFAULT_OPTIONS,
-      ...DEFAULT_FONT_OPTIONS,
+      fontOptions: DEFAULT_FONT_OPTIONS,
       ...options,
     });
   }
