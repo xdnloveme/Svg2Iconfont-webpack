@@ -10,8 +10,6 @@ const transactionHOF = function(f, options, context) {
 };
 
 module.exports = class Svg2IconfontWebpack {
-  cacheBuffers = {};
-
   constructor(options = {}) {
     info('constructor... prepare to compiling...')
     this.init({
@@ -26,6 +24,7 @@ module.exports = class Svg2IconfontWebpack {
     options.fontOptions = Object.assign(DEFAULT_FONT_OPTIONS, fontOptions);
     options.output = Object.assign(DEFAULT_OUTPUT, output);
     this.options = options;
+    this.cacheBuffers = {};
   }
 
   apply(compiler) {

@@ -24,7 +24,7 @@ const wideTraversalIcons = async (iconPath, nestFolder = null) => {
 
   for (let i = 0; i < dirTypes.length; i++) {
     const each = dirTypes[i]
-    const nestFolderUrl = nestFolder ? `${nestFolder}${each.name}` : each.name
+    const nestFolderUrl = nestFolder ? `${nestFolder}/${each.name}` : each.name
     const nestFiles = await wideTraversalIcons(
       `${iconPath}/${each.name}`,
       nestFolderUrl,

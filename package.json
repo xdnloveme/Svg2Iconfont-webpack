@@ -1,10 +1,10 @@
 {
   "name": "svg2iconfont-webpack",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "a webpack plugin for svg to iconfont",
   "main": "index.js",
   "scripts": {
-    "test": "npm run test"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -17,8 +17,10 @@
   },
   "homepage": "https://github.com/xdnloveme/Svg2Iconfont-webpack#readme",
   "dependencies": {
+    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
     "chalk": "^3.0.0",
     "font-carrier": "^0.2.0",
+    "jest": "^25.1.0",
     "postcss": "^7.0.27",
     "postcss-js": "^2.0.3"
   },
@@ -26,5 +28,11 @@
     "webpack",
     "iconfont",
     "svg"
-  ]
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0"
+  }
 }

@@ -2,7 +2,6 @@ const fontCarrier = require('font-carrier');
 const fs = require('fs');
 const wideTraversalIcons = require('../wideTraversalIcons');
 const { startUnicodeHex, MAX_UNICODE_NUM } = require('../constant');
-const { mkdirAsync } = require('../utils');
 
 const font = fontCarrier.create();
 
@@ -21,10 +20,8 @@ const fontCreator = async (assetsPath, output) => {
 
   // get iconList && set iconList cachce
   const iconList = await matchIconsList(assetsPath);
-
   for (let i = 0; i < iconList.length; i++) {
     const current = iconList[i];
-
     const svgPath = `${assetsPath}/${current.oppositePath}`;
     const cSvg = fs.readFileSync(svgPath).toString();
 
@@ -45,9 +42,9 @@ const fontCreator = async (assetsPath, output) => {
     font.setSvg(`&#x${HEXCode};`, cSvg);
   }
 
-  await mkdirAsync(output.path);
-
   const buffers = font.output();
+
+  // buffers && iconList
   return {
     buffers,
     iconList,

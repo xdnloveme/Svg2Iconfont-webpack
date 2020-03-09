@@ -9,7 +9,6 @@ const builder = function(options) {
   const iconfontClassTemp = iconfontClass(options.fontOptions);
 
   let iconClassHashTemp = {};
-
   for (let i = 0; i < iconList.length; i++) {
     const current = iconList[i];
 
