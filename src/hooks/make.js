@@ -1,6 +1,6 @@
 const { error, success } = require('../log');
 const cssBuilder = require('../css/builder');
-const { isDev } = require('../env');
+const { isProd } = require('../env');
 
 const fontOuput = function (compilation, outputOptions) {
   const cacheBuffers = this.cacheBuffers;
@@ -9,7 +9,7 @@ const fontOuput = function (compilation, outputOptions) {
   const { publicPath } = this.options.output;
 
   Object.keys(cacheBuffers).forEach(suffix => {
-    compilation.assets[`${isDev ? '' : publicPath}css/${fileName}.${suffix}`] = {
+    compilation.assets[`${isProd ? publicPath : ''}css/${fileName}.${suffix}`] = {
       source: () => {
         return cacheBuffers[suffix];
       },
@@ -28,7 +28,7 @@ const fontCssOutput = function (compilation, cssResult, outputOptions) {
 
   const { publicPath } = this.options.output;
 
-  const oppositeFilePath = `${isDev ? '' : publicPath}css/${outputOptions.cssFileName}.css`;
+  const oppositeFilePath = `${isProd ? publicPath : ''}css/${outputOptions.cssFileName}.css`;
 
   compilation.assets[oppositeFilePath] = {
     source: () => {

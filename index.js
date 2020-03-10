@@ -11,7 +11,7 @@ const transactionHOF = function(f, options, context) {
 
 module.exports = class Svg2IconfontWebpack {
   constructor(options = {}) {
-    info('constructor... prepare to compiling...')
+    info('constructor... prepare to compiling...');
     this.init({
       ...DEFAULT_OPTIONS,
       fontOptions: DEFAULT_FONT_OPTIONS,
@@ -37,15 +37,23 @@ module.exports = class Svg2IconfontWebpack {
     this.options = options;
 
     compiler.hooks.watchRun.tap('Svg2IconfontWebpack', async () => {
-      await transactionHOF(watchRun, this.pluginOptions, context)()
+      await transactionHOF(watchRun, this.pluginOptions, context)();
     });
 
-    compiler.hooks.run.tap('Svg2IconfontWebpack', transactionHOF(run, this.pluginOptions, context));
+    compiler.hooks.run.tap('Svg2IconfontWebpack', async () => {
+      await transactionHOF(run, this.pluginOptions, context)();
+    });
 
-    compiler.hooks.compilation.tap('Svg2IconfontWebpack', transactionHOF(compilation, this.pluginOptions, context));
+    compiler.hooks.compilation.tap(
+      'Svg2IconfontWebpack',
+      transactionHOF(compilation, this.pluginOptions, context),
+    );
 
     compiler.hooks.make.tap('Svg2IconfontWebpack', transactionHOF(make, this.pluginOptions, context));
 
-    compiler.hooks.invalid.tap('Svg2IconfontWebpack', e => error(e));
+    compiler.hooks.invalid.tap('Svg2IconfontWebpack', e => {
+      console.log('报错了');
+      error(e)
+    });
   }
 };

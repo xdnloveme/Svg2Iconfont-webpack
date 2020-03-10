@@ -1,0 +1,20 @@
+@font-face {
+    font-family: iconfont;
+    src: url(./test.eot),
+          url(./test.eot?#iefix) format('embedded-opentype'),
+          url(./test.woff) format('woff'),
+          url(./test.ttf) format('truetype'),
+          url(./test.svg#iconfont) format('svg')
+}
+.icon-iconfont {
+    font: normal normal normal 32px/1 "iconfont";
+}
+.iconfont-icon-emoji::before {
+    content: "\0e601"
+}
+.iconfont-icon-warn::before {
+    content: "\0e602"
+}
+.iconfont-icon-nest-add::before {
+    content: "\0e603"
+}
