@@ -6,6 +6,9 @@
   "scripts": {
     "test": "jest"
   },
+  "jest": {
+    "setupFiles": ["./test/jest.setup.js"]
+  },  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/xdnloveme/Svg2Iconfont-webpack.git"
@@ -22,7 +25,8 @@
     "font-carrier": "^0.2.0",
     "jest": "^25.1.0",
     "postcss": "^7.0.27",
-    "postcss-js": "^2.0.3"
+    "postcss-js": "^2.0.3",
+    "webpack": "^4.42.0"
   },
   "keywords": [
     "webpack",
@@ -33,6 +37,7 @@
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0"
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "html-webpack-plugin": "^3.2.0"
   }
 }

@@ -5,6 +5,10 @@ const { fontFace, iconfontClass, icon } = require('./temp');
 const builder = function(options) {
   const iconList = this.iconList;
 
+  if (!iconList) {
+    return '';
+  }
+
   const fontFaceTemp = fontFace(options.output);
   const iconfontClassTemp = iconfontClass(options.fontOptions);
 

@@ -1,13 +1,16 @@
 const { error } = require('../log');
 
 module.exports = options => {
-  return compilation => {
+  return function(compilation) {
     try {
       const { output } = options;
+      
+      const { publicPath } = this.options.output;
+
       compilation.plugin('html-webpack-plugin-before-html-processing', data => {
         // html assets
-        data.assets.css.push(`/css/${output.cssFileName}.css`);
-        return Promise.resolve(data);
+        data.assets.css.push(`${publicPath}css/${output.cssFileName}.css`);
+        return data;
       });
     } catch (e) {
       error(e);

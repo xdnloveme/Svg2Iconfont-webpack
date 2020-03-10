@@ -10,9 +10,9 @@ describe('plugin test start', () => {
 
   it('check default parameters', () => {
     const plugin = new Svg2IconfontWebpack();
-    expect(plugin.options.assetsPath).toEqual(DEFAULT_OPTIONS.assetsPath);
-    expect(plugin.options.output).toEqual(DEFAULT_OUTPUT);
-    expect(plugin.options.fontOptions).toEqual(DEFAULT_FONT_OPTIONS);
+    expect(plugin.pluginOptions.assetsPath).toEqual(DEFAULT_OPTIONS.assetsPath);
+    expect(plugin.pluginOptions.output).toEqual(DEFAULT_OUTPUT);
+    expect(plugin.pluginOptions.fontOptions).toEqual(DEFAULT_FONT_OPTIONS);
   });
 
   it('can override default parameters', () => {
@@ -29,11 +29,11 @@ describe('plugin test start', () => {
     }
 
     const plugin = new Svg2IconfontWebpack(options);
-    expect(plugin.options.assetsPath).toEqual(options.assetsPath);
-    expect(plugin.options.output.fileName).toEqual(options.output.fileName);
-    expect(plugin.options.output.cssFileName).toEqual(options.output.cssFileName);
-    expect(plugin.options.fontOptions.fontSize).toEqual(options.fontOptions.fontSize);
-    expect(plugin.options.fontOptions.fontFamily).toEqual(options.fontOptions.fontFamily);
+    expect(plugin.pluginOptions.assetsPath).toEqual(options.assetsPath);
+    expect(plugin.pluginOptions.output.fileName).toEqual(options.output.fileName);
+    expect(plugin.pluginOptions.output.cssFileName).toEqual(options.output.cssFileName);
+    expect(plugin.pluginOptions.fontOptions.fontSize).toEqual(options.fontOptions.fontSize);
+    expect(plugin.pluginOptions.fontOptions.fontFamily).toEqual(options.fontOptions.fontFamily);
   })
 
 })

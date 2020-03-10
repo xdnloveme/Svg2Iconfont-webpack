@@ -21,22 +21,30 @@ module.exports = class Svg2IconfontWebpack {
 
   init(options) {
     const { output = DEFAULT_OUTPUT, fontOptions = DEFAULT_FONT_OPTIONS } = options;
+    // merge options
     options.fontOptions = Object.assign(DEFAULT_FONT_OPTIONS, fontOptions);
     options.output = Object.assign(DEFAULT_OUTPUT, output);
-    this.options = options;
+    // mount prototype
+    this.pluginOptions = options;
     this.cacheBuffers = {};
   }
 
   apply(compiler) {
     const context = this;
 
-    compiler.hooks.watchRun.tap('Svg2IconfontWebpack', transactionHOF(watchRun, this.options, context));
+    const { options } = compiler;
 
-    compiler.hooks.run.tap('Svg2IconfontWebpack', transactionHOF(run, this.options, context));
+    this.options = options;
 
-    compiler.hooks.compilation.tap('Svg2IconfontWebpack', transactionHOF(compilation, this.options, context));
+    compiler.hooks.watchRun.tap('Svg2IconfontWebpack', async () => {
+      await transactionHOF(watchRun, this.pluginOptions, context)()
+    });
 
-    compiler.hooks.make.tap('Svg2IconfontWebpack', transactionHOF(make, this.options, context));
+    compiler.hooks.run.tap('Svg2IconfontWebpack', transactionHOF(run, this.pluginOptions, context));
+
+    compiler.hooks.compilation.tap('Svg2IconfontWebpack', transactionHOF(compilation, this.pluginOptions, context));
+
+    compiler.hooks.make.tap('Svg2IconfontWebpack', transactionHOF(make, this.pluginOptions, context));
 
     compiler.hooks.invalid.tap('Svg2IconfontWebpack', e => error(e));
   }
