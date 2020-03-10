@@ -38,9 +38,6 @@ module.exports = {
       assetsPath: resolve("./assets/icon"),
       // output（输出配置）
       output: {
-        // 输出文件夹地址
-        // destination
-        path: resolve("../dist"),
         // 输出字体文件的名称(ttf, otf, etc...)
         // font-lib name => myIconfont
         fileName: "myIconfont",
