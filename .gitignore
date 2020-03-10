@@ -1,7 +1,7 @@
 .DS_Store
 node_modules
 /dist
-./test/webpack-build-test/dist
+/test/webpack-build-test/dist
 
 # local env files
 .env.local
