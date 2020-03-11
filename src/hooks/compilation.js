@@ -1,4 +1,5 @@
 const { error } = require('../log');
+const { isProd } = require('../env');
 
 module.exports = options => {
   return function(compilation) {
