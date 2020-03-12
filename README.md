@@ -32,7 +32,7 @@ const resolve = oppositePath => {
 
 module.exports = {
   plugins: [
-    new svg2iconfontWebpack({
+    new Svg2IconfontWebpack({
       // 你的资源文件夹根目录
       // your svg assets root url
       assetsPath: resolve("./assets/icon"),

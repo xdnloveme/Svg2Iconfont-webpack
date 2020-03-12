@@ -5,7 +5,7 @@ const resolve = currentPath => {
 }
 
 const resolvePWD = currentPath => {
-  return path.resolve(process.env.PWD, './', currentPath);
+  return path.resolve(process.cwd(), './', currentPath);
 }
 
 module.exports = {
