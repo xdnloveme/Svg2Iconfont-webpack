@@ -20,6 +20,10 @@ First of all, install the module:
 npm i svg2iconfont-webpack
 ```
 
+> ⚠️ Warning: The webpack-plugin `Svg2Iconfont-webpack` require webpack v4, not support webpack v3.
+
+
+
 ## Usage
 
 ```javascript
