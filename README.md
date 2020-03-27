@@ -40,6 +40,9 @@ module.exports = {
       // 你的资源文件夹根目录
       // your svg assets root url
       assetsPath: resolve("./assets/icon"),
+      // 对应图标引入字体文件的class类(在i标签中声明)
+      // icon => className to import font libs
+      className: "icon-iconfont",
       // output（输出配置）
       output: {
         // 输出字体文件的名称(ttf, otf, etc...)
@@ -71,8 +74,10 @@ And you can show the icons by setting **ClassName(From Filename)**, the same nam
 
 ```html
 <!-- 你可以通过设置你对应svg文件的文件名（不带svg后缀名），来达到显示图标的目的，注意，如果你的文件是嵌套在文件夹里面的，请输入文件夹 + 文件名的方式来对应显示，分隔符是“-”而不是“/” -->
+<!-- `icon-iconfont` 这个类来自于option的设置：options.className -->
 <!-- if you want to show the "my-icon-file-name.svg" ICON -->
 <!-- the className below represent the icons -->
+<!-- `icon-iconfont` from "options.className" -->
 <i class="my-icon-file-name icon-iconfont"></i>
 ```
 
@@ -84,6 +89,7 @@ OR You can set  its unicode by your own className(**First, you should know the I
 
 ```html
 <!-- add class "icon-iconfont" -->
+<!-- `icon-iconfont` from "options.className" -->
 <i class="my-icon-class icon-iconfont"></i>
 ```
 
