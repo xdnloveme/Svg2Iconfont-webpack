@@ -1,8 +1,9 @@
-module.exports = fontOptions => {
+module.exports = (fontOptions, options) => {
   const { fontFamily, fontSize } = fontOptions;
+  const { className } = options;
 
   return {
-    '.icon-iconfont': {
+    [`.${className}`]: {
       font: `normal normal normal ${fontSize}px/1 "${fontFamily}";`,
     },
   };

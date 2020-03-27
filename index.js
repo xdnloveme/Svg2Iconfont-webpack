@@ -50,10 +50,5 @@ module.exports = class Svg2IconfontWebpack {
     );
 
     compiler.hooks.make.tap('Svg2IconfontWebpack', transactionHOF(make, this.pluginOptions, context));
-
-    compiler.hooks.invalid.tap('Svg2IconfontWebpack', e => {
-      console.log('报错了');
-      error(e)
-    });
   }
 };

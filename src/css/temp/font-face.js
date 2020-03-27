@@ -1,9 +1,10 @@
-module.exports = outputOptions => {
+module.exports = (outputOptions, fontOptions) => {
   const { fileName } = outputOptions;
+  const { fontFamily } = fontOptions;
 
   return {
     '@font-face': {
-      'font-family': 'iconfont',
+      'font-family': fontFamily,
       src: `url(./${fileName}.eot),
           url(./${fileName}.eot?#iefix) format('embedded-opentype'),
           url(./${fileName}.woff) format('woff'),

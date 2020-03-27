@@ -19,6 +19,7 @@ module.exports = {
   // default all options
   DEFAULT_OPTIONS: {
     assetsPath: resolvePWD('./src/assets'),
+    className: 'icon-iconfont',
     output: DEFAULT_OUTPUT,
   },
   // default font options

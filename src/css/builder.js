@@ -9,8 +9,8 @@ const builder = function(options) {
     return '';
   }
 
-  const fontFaceTemp = fontFace(options.output);
-  const iconfontClassTemp = iconfontClass(options.fontOptions);
+  const fontFaceTemp = fontFace(options.output, options.fontOptions);
+  const iconfontClassTemp = iconfontClass(options.fontOptions, options);
 
   let iconClassHashTemp = {};
   for (let i = 0; i < iconList.length; i++) {
