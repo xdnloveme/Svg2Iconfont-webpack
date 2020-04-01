@@ -1,8 +1,8 @@
-module.exports = icon => {
+module.exports = (cssPrefix, icon) => {
   const { name, unicode } = icon;
 
   return {
-    [`.iconfont-${name}::before`]: {
+    [`.${cssPrefix}-${name}::before`]: {
       content: `"\\${unicode}"`,
     },
   };

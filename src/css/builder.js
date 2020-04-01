@@ -9,8 +9,8 @@ const builder = function(options) {
     return '';
   }
 
-  const fontFaceTemp = fontFace(options.output, options.fontOptions);
-  const iconfontClassTemp = iconfontClass(options.fontOptions, options);
+  const fontFaceTemp = fontFace(options.fontOptions.fontFamily, options.output);
+  const iconfontClassTemp = iconfontClass(options.fontOptions);
 
   let iconClassHashTemp = {};
   for (let i = 0; i < iconList.length; i++) {
@@ -25,7 +25,7 @@ const builder = function(options) {
     // rename
     const formatName = name.split('/').join('-');
 
-    const iconTemp = icon({
+    const iconTemp = icon(options.fontOptions.cssPrefix, {
       name: formatName,
       unicode: current.unicode,
     });

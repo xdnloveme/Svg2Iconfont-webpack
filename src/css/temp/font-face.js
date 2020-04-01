@@ -1,4 +1,4 @@
-module.exports = (outputOptions, fontOptions) => {
+module.exports = (fontFamily,outputOptions) => {
   const { fileName } = outputOptions;
   const { fontFamily } = fontOptions;
 
@@ -10,6 +10,8 @@ module.exports = (outputOptions, fontOptions) => {
           url(./${fileName}.woff) format('woff'),
           url(./${fileName}.ttf) format('truetype'),
           url(./${fileName}.svg#iconfont) format('svg')`,
+      'font-weight': 'normal',
+      'font-style': 'normal'
     },
   };
 };
