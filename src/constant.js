@@ -23,6 +23,7 @@ module.exports = {
   },
   // default font options
   DEFAULT_FONT_OPTIONS: {
+    cssPrefix: 'iconfont',
     fontSize: 32,
     fontFamily: 'iconfont',
   },
