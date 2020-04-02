@@ -1,6 +1,5 @@
 module.exports = (fontFamily,outputOptions) => {
   const { fileName } = outputOptions;
-  const { fontFamily } = fontOptions;
 
   return {
     '@font-face': {
