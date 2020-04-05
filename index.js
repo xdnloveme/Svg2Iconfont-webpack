@@ -1,6 +1,7 @@
 const { compilation, make, watchRun, run } = require('./src/hooks');
 const { error, info } = require('./src/log');
 const { DEFAULT_OUTPUT, DEFAULT_OPTIONS, DEFAULT_FONT_OPTIONS } = require('./src/constant');
+const Server = require('./src/preview/server');
 
 const transactionHOF = function(f, options, context) {
   if (typeof f !== 'function') {
@@ -30,12 +31,21 @@ module.exports = class Svg2IconfontWebpack {
   }
 
   apply(compiler) {
-    const context = this;
-
     const { options } = compiler;
 
     this.options = options;
+    console.log('初始化', Server);
+    const server = new Server(this);
 
+    this.previewServer = server;
+    console.log('哈哈', server, server.start);
+    // server
+    this.previewServer.start();
+
+    this.initHooks(compiler, this);
+  }
+
+  initHooks(compiler, context) {
     compiler.hooks.watchRun.tap('Svg2IconfontWebpack', async () => {
       await transactionHOF(watchRun, this.pluginOptions, context)();
     });

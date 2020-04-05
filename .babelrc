@@ -4,9 +4,6 @@
       "@babel/preset-env",
       {
         "useBuiltIns": "usage",
-        "targets": {
-          "node": "current"
-        },
         "corejs": "3",
         "exclude": [
           "transform-async-to-generator",
