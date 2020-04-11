@@ -8,7 +8,6 @@ module.exports = pluginOptions => {
     try {
       const { output } = pluginOptions;
       compilation.hooks.additionalAssets.tapAsync('Svg2IconfontWebpack', cb => {
-        
         // format assetsPath and content
         const fontOutputAssets = fontOutput(context, output);
 
@@ -42,7 +41,6 @@ module.exports = pluginOptions => {
         success(`${cssFilePath} built successfully!`);
         cb();
       });
-      
     } catch (e) {
       error(e);
     }

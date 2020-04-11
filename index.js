@@ -46,10 +46,13 @@ module.exports = class Svg2IconfontWebpack {
 
   initHooks(compiler, context) {
     // 开发模式下（dev）
-    compiler.hooks.watchRun.tap('Svg2IconfontWebpack', transactionHOF(watchRun, this.pluginOptions, context));
+    compiler.hooks.watchRun.tapAsync(
+      'Svg2IconfontWebpack',
+      transactionHOF(watchRun, this.pluginOptions, context),
+    );
 
     // build
-    compiler.hooks.run.tap('Svg2IconfontWebpack', transactionHOF(run, this.pluginOptions, context));
+    compiler.hooks.run.tapAsync('Svg2IconfontWebpack', transactionHOF(run, this.pluginOptions, context));
 
     compiler.hooks.compilation.tap(
       'Svg2IconfontWebpack',

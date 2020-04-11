@@ -32,6 +32,7 @@ function renderIconList (iconList) {
   const container = document.createDocumentFragment();
   container.appendChild(createIconListContainer(iconList));
 
+  document.getElementById('root').innerHTML = null;
   document.getElementById('root').appendChild(container);
 }
 

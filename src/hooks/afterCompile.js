@@ -6,12 +6,8 @@ module.exports = pluginOptions => {
 
       // add watch - file dep
       const { assetsPath } = pluginOptions;
-      const watchDependencies = this.iconList.map(item => `${assetsPath}/${item.oppositePath}`);
 
-      for(let dep of watchDependencies) {
-        compilation.fileDependencies.add(dep)
-      }
-      
+      compilation.contextDependencies.add(assetsPath);
     } catch (e) {
       error(e);
     }
