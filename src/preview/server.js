@@ -1,33 +1,28 @@
 const webpack = require('webpack');
 const express = require('express');
-const events = require('events');
+const chalk = require('chalk');
+const { EventEmitter } = require('events');
 const http = require('http');
 const path = require('path');
 const WebSocket = require('ws');
+const portfinder = require('portfinder');
+const { success } = require('../log');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const { createProxyMiddleware } = require('http-proxy-middleware');
-// const webpackHotMiddleware = require('webpack-hot-middleware');
 const webpackConfig = require('./config/webpack.config');
 
-console.log(webpackConfig);
-
 const defaults = {
-  host: '0.0.0.0',
-  port: 3001,
+  host: '127.0.0.1',
+  port: 8081,
   https: false,
 };
 
-module.exports = class Server extends events.EventEmitter {
-  constructor(context) {
+module.exports = class Server extends EventEmitter {
+  constructor(context, { options }) {
     super();
     this.context = context;
     const app = express();
     const compiler = webpack(webpackConfig);
-
-    // const HotMiddleware = webpackHotMiddleware(compiler, {
-    //   log: false,
-    //   heartbeat: 2000,
-    // });
 
     const DevMiddleware = webpackDevMiddleware(compiler, {
       //绑定中间件的公共路径,与webpack配置的路径相同
@@ -35,16 +30,21 @@ module.exports = class Server extends events.EventEmitter {
       logLevel: 'silent', //向控制台显示任何内容
     });
 
-    app.use(DevMiddleware);
-    // app.use(HotMiddleware);
+    console.log(compiler);
+    console.log(DevMiddleware);
 
-    app.use('/project', createProxyMiddleware({
-      target: 'http://localhost:8080',
-      pathRewrite: {
-        '^/project': '',
-      },
-      changeOrigin: true
-    }))
+    app.use(DevMiddleware);
+
+    app.use(
+      '/project',
+      createProxyMiddleware({
+        target: 'http://localhost:8080',
+        pathRewrite: {
+          '^/project': '',
+        },
+        changeOrigin: true,
+      }),
+    );
 
     app.use(express.static(path.resolve(__dirname, '../dist')));
 
@@ -54,9 +54,14 @@ module.exports = class Server extends events.EventEmitter {
   }
 
   async start() {
+    portfinder.basePort = defaults.port;
+    const PORT = await portfinder.getPortPromise();
+    const HOST = defaults.host;
+
     // httpserver
     if (this.server) {
-      this.server.listen(defaults.port, err => {
+      this.server.listen(PORT, err => {
+        success(`Preview Server Start at: ${chalk.blue('http://' + HOST + ':' + PORT)}`);
         if (err) {
           console.error(err);
         }
@@ -65,9 +70,7 @@ module.exports = class Server extends events.EventEmitter {
 
     // websocket
     if (this.wss) {
-      const ws = await this.connect(this.wss);
-
-      this.ws = ws;
+      this.ws = await this.connect(this.wss);
     }
 
     this.on('iconList', this.handleIconList.bind(this));
@@ -82,6 +85,8 @@ module.exports = class Server extends events.EventEmitter {
       });
     });
   }
+
+  close() {}
 
   handleMessage(event) {
     if (typeof event !== 'string') return;
@@ -99,7 +104,6 @@ module.exports = class Server extends events.EventEmitter {
   }
 
   handleIconList() {
-    
     const iconList = this.context.iconList;
     this.send(iconList);
   }

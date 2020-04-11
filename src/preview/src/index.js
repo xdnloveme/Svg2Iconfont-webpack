@@ -2,8 +2,6 @@ import './index.css';
 
 window.onload = function () {
   const ws = new WebSocket('ws://localhost:3001');
-
-  console.log(99);
   
   ws.onopen = function(event) {
     console.log("WebSocket is open now.", event, ws);
@@ -11,7 +9,7 @@ window.onload = function () {
   };
 
   ws.onerror = function () {
-    console.log('错误');
+    document.getElementById('root').innerHTML = '错误';
   }
   
   // Listen for messages
@@ -23,6 +21,7 @@ window.onload = function () {
       renderIconList(iconList);
     } catch (e) {
       console.log(e);
+      document.getElementById('root').innerHTML = JSON.stringify(e);
     }
   });  
 
@@ -32,8 +31,7 @@ function renderIconList (iconList) {
   const container = document.createDocumentFragment();
   container.appendChild(createIconListContainer(iconList));
 
-  document.getElementById('root').innerHTML = null;
-  document.getElementById('root').appendChild(container);
+  document.getElementById('root').replaceChild(container);
 }
 
 function formatName(pathName) {
