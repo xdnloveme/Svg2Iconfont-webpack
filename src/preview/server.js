@@ -10,6 +10,7 @@ const { success } = require('../log');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const webpackConfig = require('./config/webpack.config');
+const AddAssetsPlugins = require('./addAssetsPlugin');
 
 const defaults = {
   host: '127.0.0.1',
@@ -23,6 +24,7 @@ module.exports = class Server extends EventEmitter {
     this.context = context;
     const app = express();
     const compiler = webpack(webpackConfig);
+    this.compiler = compiler;
 
     const DevMiddleware = webpackDevMiddleware(compiler, {
       //绑定中间件的公共路径,与webpack配置的路径相同
@@ -30,8 +32,7 @@ module.exports = class Server extends EventEmitter {
       logLevel: 'silent', //向控制台显示任何内容
     });
 
-    console.log(compiler);
-    console.log(DevMiddleware);
+    this.middleware = DevMiddleware;
 
     app.use(DevMiddleware);
 
@@ -116,5 +117,25 @@ module.exports = class Server extends EventEmitter {
         }
       });
     }
+  }
+
+  recompile({ css, font }) {
+    // const compiler = this.middleware.context.compiler;
+
+    const fontFile = font.reduce((t, item) => {
+      t[item.assetsAbsolutePath] = item.content;
+      return t;
+    }, {});
+
+    const fileList = {
+      [css.cssFilePath]: css.content,
+      ...fontFile,
+    };
+
+    this.compiler.apply(new AddAssetsPlugins(fileList));
+    this.context.previewServer.send(this.context.iconList);
+    console.log('重新编译了');
+
+    this.middleware.invalidate();
   }
 };

@@ -10,10 +10,6 @@ module.exports = pluginOptions => {
       this.cacheBuffers = buffers;
       this.iconList = iconList;
 
-      if (this.previewServer) {
-        this.previewServer.send(this.iconList);
-      }
-
       callback();
     } catch (e) {
       error(e);
