@@ -1,10 +1,10 @@
 const { error } = require('../log');
 const { isProd } = require('../env');
 
-module.exports = options => {
+module.exports = pluginOptions => {
   return function(compilation) {
     try {
-      const { output } = options;
+      const { output } = pluginOptions;
       
       const { publicPath } = this.options.output;
 

@@ -1,5 +1,5 @@
-const { compilation, make, watchRun, run } = require('./src/hooks');
-const { error, info } = require('./src/log');
+const { compilation, make, watchRun, run, afterCompile } = require('./src/hooks');
+const { info } = require('./src/log');
 const { DEFAULT_OUTPUT, DEFAULT_OPTIONS, DEFAULT_FONT_OPTIONS } = require('./src/constant');
 const Server = require('./src/preview/server');
 
@@ -34,11 +34,10 @@ module.exports = class Svg2IconfontWebpack {
     const { options } = compiler;
 
     this.options = options;
-    console.log('初始化', Server);
+
     const server = new Server(this);
 
     this.previewServer = server;
-    console.log('哈哈', server, server.start);
     // server
     this.previewServer.start();
 
@@ -46,17 +45,20 @@ module.exports = class Svg2IconfontWebpack {
   }
 
   initHooks(compiler, context) {
-    compiler.hooks.watchRun.tap('Svg2IconfontWebpack', async () => {
-      await transactionHOF(watchRun, this.pluginOptions, context)();
-    });
+    // 开发模式下（dev）
+    compiler.hooks.watchRun.tap('Svg2IconfontWebpack', transactionHOF(watchRun, this.pluginOptions, context));
 
-    compiler.hooks.run.tap('Svg2IconfontWebpack', async () => {
-      await transactionHOF(run, this.pluginOptions, context)();
-    });
+    // build
+    compiler.hooks.run.tap('Svg2IconfontWebpack', transactionHOF(run, this.pluginOptions, context));
 
     compiler.hooks.compilation.tap(
       'Svg2IconfontWebpack',
       transactionHOF(compilation, this.pluginOptions, context),
+    );
+
+    compiler.hooks.afterCompile.tap(
+      'Svg2IconfontWebpack',
+      transactionHOF(afterCompile, this.pluginOptions, context),
     );
 
     compiler.hooks.make.tap('Svg2IconfontWebpack', transactionHOF(make, this.pluginOptions, context));

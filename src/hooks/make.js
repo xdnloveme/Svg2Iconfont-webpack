@@ -1,66 +1,48 @@
 const { error, success } = require('../log');
-const cssBuilder = require('../css/builder');
-const { isProd } = require('../env');
+const fontOutput = require('../core/fontOutput');
+const fontCssOutput = require('../core/fontCssOutput');
 
-const fontOuput = function (compilation, outputOptions) {
-  const cacheBuffers = this.cacheBuffers;
-  const { fileName } = outputOptions;
-
-  const { publicPath } = this.options.output;
-
-  Object.keys(cacheBuffers).forEach(suffix => {
-    compilation.assets[`${isProd ? publicPath : ''}css/${fileName}.${suffix}`] = {
-      source: () => {
-        return cacheBuffers[suffix];
-      },
-      size: () => {
-        return Buffer.byteLength(cacheBuffers[suffix]);
-      },
-    };
-  });
-
-  return Object.keys(cacheBuffers).join(',');
-};
-
-const fontCssOutput = function (compilation, cssResult, outputOptions) {
-  // get CSS file content
-  const fileContent = cssResult.css;
-
-  const { publicPath } = this.options.output;
-
-  const oppositeFilePath = `${isProd ? publicPath : ''}css/${outputOptions.cssFileName}.css`;
-
-  compilation.assets[oppositeFilePath] = {
-    source: () => {
-      return fileContent;
-    },
-    size: () => {
-      return Buffer.byteLength(fileContent, 'utf-8');
-    },
-  };
-
-  return oppositeFilePath;
-}
-
-module.exports = options => {
+module.exports = pluginOptions => {
   return function(compilation) {
     const context = this;
     try {
-      const { output } = options;
+      const { output } = pluginOptions;
       compilation.hooks.additionalAssets.tapAsync('Svg2IconfontWebpack', cb => {
+        
+        // format assetsPath and content
+        const fontOutputAssets = fontOutput(context, output);
 
-        // output font libs
-        const cacheBuffersMsg = fontOuput.call(context, compilation, output);
-        success(`${cacheBuffersMsg} built successfully!`);
+        // output
+        fontOutputAssets.forEach(data => {
+          const { assetsAbsolutePath, content } = data;
+          compilation.assets[assetsAbsolutePath] = {
+            source: () => {
+              return content;
+            },
+            size: () => {
+              return Buffer.byteLength(content);
+            },
+          };
+        });
 
-        const cssResult = cssBuilder.call(context, options);
+        success(`${Object.keys(context.cacheBuffers).join(',')} built successfully!`);
 
         // output css files
-        const fontCssMsg = fontCssOutput.call(context, compilation, cssResult, output);
-        success(`${fontCssMsg} built successfully!`);
-        
+        const { cssFilePath, content } = fontCssOutput(context, output, pluginOptions);
+
+        compilation.assets[cssFilePath] = {
+          source: () => {
+            return content;
+          },
+          size: () => {
+            return Buffer.byteLength(content, 'utf-8');
+          },
+        };
+
+        success(`${cssFilePath} built successfully!`);
         cb();
       });
+      
     } catch (e) {
       error(e);
     }

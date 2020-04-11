@@ -4,11 +4,15 @@ body {
     sans-serif, apple color emoji, segoe ui emoji, segoe ui symbol, noto color emoji, sans-serif;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 #root {
   height: 300px;
-  padding-left: 240px;
-  padding-top: 120px;
-  padding-right: 240px;
+  padding-left: 20%;
+  padding-top: 60px;
+  padding-right: 20%;
 }
 
 #root > h1 {
@@ -16,14 +20,38 @@ body {
   font-size: 30px;
   margin-top: 0px;
   font-weight: 500;
+  border-bottom: 1px solid #dddddd;
+  padding-left: 20px;
 }
 
 .icon-list-ul {
   padding-left: 0px;
   margin: 0px;
+  /* overflow: hidden; */
+  float: left;
 }
 
 .icon-list-ul > li {
   float: left;
   width: 20%;
+  text-align: center;
+  list-style: none;
+  min-height: 108px;
+  /* height: 100px; */
+  margin-bottom: 20px;
+  overflow: hidden;
+  border-radius: 10px;
+  cursor: pointer;
+  padding-top: 20px;
+}
+
+.icon-list-ul > li > p {
+  margin-bottom: 0px;
+}
+
+.icon-list-ul > li:hover {
+  background-color: #1989fa;
+  color: #fff;
+  transform: scale(1.15);
+  transition: transform .4s;
 }

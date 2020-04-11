@@ -5,6 +5,7 @@ const http = require('http');
 const path = require('path');
 const WebSocket = require('ws');
 const webpackDevMiddleware = require('webpack-dev-middleware');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 // const webpackHotMiddleware = require('webpack-hot-middleware');
 const webpackConfig = require('./config/webpack.config');
 
@@ -21,21 +22,29 @@ module.exports = class Server extends events.EventEmitter {
     super();
     this.context = context;
     const app = express();
-    const complier = webpack(webpackConfig);
+    const compiler = webpack(webpackConfig);
 
-    // const HotMiddleware = webpackHotMiddleware(complier, {
+    // const HotMiddleware = webpackHotMiddleware(compiler, {
     //   log: false,
     //   heartbeat: 2000,
     // });
 
-    const DevMiddleware = webpackDevMiddleware(complier, {
+    const DevMiddleware = webpackDevMiddleware(compiler, {
       //绑定中间件的公共路径,与webpack配置的路径相同
       publicPath: webpackConfig.output.publicPath,
-      logLevel: false, //向控制台显示任何内容
+      logLevel: 'silent', //向控制台显示任何内容
     });
 
     app.use(DevMiddleware);
     // app.use(HotMiddleware);
+
+    app.use('/project', createProxyMiddleware({
+      target: 'http://localhost:8080',
+      pathRewrite: {
+        '^/project': '',
+      },
+      changeOrigin: true
+    }))
 
     app.use(express.static(path.resolve(__dirname, '../dist')));
 
@@ -92,7 +101,6 @@ module.exports = class Server extends events.EventEmitter {
   handleIconList() {
     
     const iconList = this.context.iconList;
-    console.log('获取到了', this.context, iconList);
     this.send(iconList);
   }
 

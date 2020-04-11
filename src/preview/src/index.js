@@ -19,7 +19,7 @@ window.onload = function () {
     console.log('Message from server ', event);
     try {
       const iconList = JSON.parse(event.data);
-      console.log('数据是', iconList);
+      fetchAssets();
       renderIconList(iconList);
     } catch (e) {
       console.log(e);
@@ -40,7 +40,6 @@ function formatName(pathName) {
 
   // remove suffix
   splitName.pop();
-  console.log(splitName);
   const name = splitName.join('').split('/').join('-');
 
   return name;
@@ -60,8 +59,16 @@ function createIconListContainer(iconList) {
   for(let i = 0; i < iconList.length;i++) {
     const liNode = document.createElement('li');
     const actualName = formatName(iconList[i].oppositePath);
+    
+    const iNode = document.createElement('i');
+    iNode.setAttribute('class', `iconfont-${actualName}`)
+
+    const pNode = document.createElement('p');
+
     const liText = document.createTextNode(actualName);
-    liNode.appendChild(liText);
+    pNode.appendChild(liText);
+    liNode.appendChild(iNode);
+    liNode.appendChild(pNode);
     ulNode.appendChild(liNode)
   }
   
@@ -69,4 +76,9 @@ function createIconListContainer(iconList) {
   container.appendChild(ulNode);
 
   return container
+}
+
+function fetchAssets () {
+  const link2 = document.getElementsByTagName('link')[0];
+  link2.href = '/project/css/iconfont-web.css';
 }
