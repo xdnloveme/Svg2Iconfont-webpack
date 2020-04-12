@@ -8,13 +8,12 @@ const WebSocket = require('ws');
 const portfinder = require('portfinder');
 const { success } = require('../log');
 const webpackDevMiddleware = require('webpack-dev-middleware');
-const { createProxyMiddleware } = require('http-proxy-middleware');
 const webpackConfig = require('./config/webpack.config');
 const AddAssetsPlugins = require('./addAssetsPlugin');
 
 const defaults = {
   host: '127.0.0.1',
-  port: 8081,
+  port: 3000,
   https: false,
 };
 
@@ -22,6 +21,8 @@ module.exports = class Server extends EventEmitter {
   constructor(context, { options }) {
     super();
     this.context = context;
+
+    // express instance
     const app = express();
     const compiler = webpack(webpackConfig);
     this.compiler = compiler;
@@ -36,17 +37,6 @@ module.exports = class Server extends EventEmitter {
 
     app.use(DevMiddleware);
 
-    app.use(
-      '/project',
-      createProxyMiddleware({
-        target: 'http://localhost:8080',
-        pathRewrite: {
-          '^/project': '',
-        },
-        changeOrigin: true,
-      }),
-    );
-
     app.use(express.static(path.resolve(__dirname, '../dist')));
 
     this.server = http.createServer(app);
@@ -57,7 +47,7 @@ module.exports = class Server extends EventEmitter {
   async start() {
     portfinder.basePort = defaults.port;
     const PORT = await portfinder.getPortPromise();
-    const HOST = defaults.host;    
+    const HOST = defaults.host;
 
     // httpserver
     if (this.server) {
@@ -69,22 +59,21 @@ module.exports = class Server extends EventEmitter {
       });
     }
 
+    // init on event
+    this.onEvent();
+
     // websocket
     if (this.wss) {
-      this.ws = await this.connect(this.wss);
-    }
 
-    this.on('iconList', this.handleIconList.bind(this));
+      // connect
+      this.wss.on('connection', ws => {
+        ws.on('message', this.handleMessage.bind(this));
+      });
+    }
   }
 
-  connect(wss) {
-    return new Promise(resolve => {
-      wss.on('connection', ws => {
-        ws.on('message', this.handleMessage.bind(this));
-
-        resolve(ws);
-      });
-    });
+  onEvent() {
+    this.on('iconList', this.handleIconList.bind(this));
   }
 
   close() {}
@@ -135,7 +124,6 @@ module.exports = class Server extends EventEmitter {
 
     this.compiler.apply(new AddAssetsPlugins(fileList));
     this.context.previewServer.send(this.context.iconList);
-    // console.log('重新编译了');
 
     this.middleware.invalidate();
   }

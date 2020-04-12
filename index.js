@@ -13,14 +13,14 @@ const transactionHOF = function(f, options, context) {
 module.exports = class Svg2IconfontWebpack {
   constructor(options = {}) {
     info('constructor... prepare to compiling...');
-    this.init({
+    this.resolveOptions({
       ...DEFAULT_OPTIONS,
       fontOptions: DEFAULT_FONT_OPTIONS,
       ...options,
     });
   }
 
-  init(options) {
+  resolveOptions(options) {
     const { output = DEFAULT_OUTPUT, fontOptions = DEFAULT_FONT_OPTIONS } = options;
     // merge options
     options.fontOptions = Object.assign(DEFAULT_FONT_OPTIONS, fontOptions);
@@ -35,16 +35,25 @@ module.exports = class Svg2IconfontWebpack {
 
     this.options = options;
 
-    const server = new Server(this, {
-      options,
-    });
-    console.log('进来了', process.argv);
+    const { preview } = this.pluginOptions;
 
-    this.previewServer = server;
-    // server
-    this.previewServer.start();
-
+    if (preview) {
+      this.previewServerInit(this);
+    }
+    
     this.initHooks(compiler, this);
+  }
+
+  previewServerInit (context) {
+    process.env.__PLUGIN_PREVIEW_CSSFILENAME__ = context.pluginOptions.output.cssFileName;
+
+    const server = new Server(context, {
+      options: context.options,
+    });
+
+    context.previewServer = server;
+    // server
+    context.previewServer.start();
   }
 
   initHooks(compiler, context) {

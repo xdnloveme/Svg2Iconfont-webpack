@@ -20,6 +20,7 @@ module.exports = {
   DEFAULT_OPTIONS: {
     assetsPath: resolvePWD('./src/assets'),
     output: DEFAULT_OUTPUT,
+    preview: false,
   },
   // default font options
   DEFAULT_FONT_OPTIONS: {

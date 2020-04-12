@@ -28,16 +28,9 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../public/index.html'),
-      templateParameters: (compilation, assets, assetTags, options) => {
+      templateParameters: () => {
         return {
-          compilation,
-          webpackConfig: compilation.options,
-          htmlWebpackPlugin: {
-            tags: assetTags,
-            files: assets,
-            options
-          },
-          'foo': process,
+          'cssFileName': process.env.__PLUGIN_PREVIEW_CSSFILENAME__,
         };
       },
     }),
