@@ -61,7 +61,11 @@ module.exports = {
         // 图标的font-family
         // font-family
         fontFamily: 'iconfont'
-      }
+      },
+
+      // 是否开启图标列表预览模式
+      // 预览模式默认监听在本地3000端口，若端口占用依次递增
+      preview: false 
     })
   ]
 }
