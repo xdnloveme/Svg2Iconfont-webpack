@@ -53,5 +53,38 @@ body {
   background-color: #1989fa;
   color: #fff;
   transform: scale(1.15);
-  transition: transform .4s;
+  transition: transform 0.4s;
+}
+
+/* toast */
+.toast-div {
+  position: absolute;
+  left: 50%;
+  top: 100px;
+  transform: translateX(-50%);
+  color: #fff;
+  background-color: rgba(17, 17, 17, 0.7);
+  padding-left: 44px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-right: 44px;
+  border-radius: 4px;
+  animation: toastMove .4s ease-in-out;
+  box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 9px 28px 8px rgba(0, 0, 0, 0.05);
+}
+
+@keyframes toastMove {
+  from {
+    transform: translate(-50%,-40px);
+    opacity: .6;
+  }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+.toast-div > p {
+  margin: 0;
 }

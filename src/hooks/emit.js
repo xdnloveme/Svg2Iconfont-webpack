@@ -41,7 +41,6 @@ module.exports = pluginOptions => {
       success(chalk.green(`${cssFilePath} built successfully!`));
 
       if (this.previewServer) {
-        console.log('哈哈哈哈我发出消息额', this.iconList);
         this.previewServer.recompile({
           css: {
             cssFilePath,

@@ -57,7 +57,7 @@ module.exports = class Server extends EventEmitter {
   async start() {
     portfinder.basePort = defaults.port;
     const PORT = await portfinder.getPortPromise();
-    const HOST = defaults.host;
+    const HOST = defaults.host;    
 
     // httpserver
     if (this.server) {
@@ -106,22 +106,23 @@ module.exports = class Server extends EventEmitter {
 
   handleIconList() {
     const iconList = this.context.iconList;
-    this.send(iconList);
+    this.send({
+      iconList,
+      pluginOptions: this.context.pluginOptions,
+    });
   }
 
   send(payload) {
     if (this.wss) {
       this.wss.clients.forEach(function each(client) {
         if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify(payload));
+          client.send(JSON.stringify(payload), 22);
         }
       });
     }
   }
 
   recompile({ css, font }) {
-    // const compiler = this.middleware.context.compiler;
-
     const fontFile = font.reduce((t, item) => {
       t[item.assetsAbsolutePath] = item.content;
       return t;
@@ -134,7 +135,7 @@ module.exports = class Server extends EventEmitter {
 
     this.compiler.apply(new AddAssetsPlugins(fileList));
     this.context.previewServer.send(this.context.iconList);
-    console.log('重新编译了');
+    // console.log('重新编译了');
 
     this.middleware.invalidate();
   }

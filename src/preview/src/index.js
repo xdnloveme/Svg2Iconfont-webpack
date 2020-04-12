@@ -1,7 +1,11 @@
 import './index.css';
+import Toast from './toast';
+
+let isFirstOnload = true;
+let cssPrefix = 'iconfont';
 
 window.onload = function() {
-  const ws = new WebSocket('ws://localhost:8082');
+  const ws = new WebSocket(`ws://${window.location.host}`);
 
   ws.onopen = function(event) {
     console.log('WebSocket is open now.', event, ws);
@@ -14,10 +18,18 @@ window.onload = function() {
 
   // Listen for messages
   ws.addEventListener('message', function(event) {
-    console.log('Message from server ', event);
+    console.log('Receive from Websocket', event);
+    let iconList = [];
     try {
-      const iconList = JSON.parse(event.data);
-      fetchAssets();
+      const payload = JSON.parse(event.data);
+      iconList = payload.iconList;
+      cssPrefix = payload.pluginOptions.fontOptions['cssPrefix'] || cssPrefix;
+      if (isFirstOnload) {
+        isFirstOnload = false;
+      } else {
+        fetchAssets();
+      }
+
       renderIconList(iconList);
     } catch (e) {
       console.log(e);
@@ -48,7 +60,6 @@ function formatName(pathName) {
 }
 
 function createIconListContainer(iconList) {
-  console.log(iconList);
   const container = document.createDocumentFragment();
 
   // title
@@ -60,13 +71,13 @@ function createIconListContainer(iconList) {
   ulNode.setAttribute('class', 'icon-list-ul');
   for (let i = 0; i < iconList.length; i++) {
     const liNode = document.createElement('li');
-    
+
     const actualName = formatName(iconList[i].oppositePath);
 
     const iNode = document.createElement('i');
 
     // set class name
-    const iNodeClassName = `iconfont-${actualName}`;
+    const iNodeClassName = `${cssPrefix}-${actualName}`;
     iNode.setAttribute('class', iNodeClassName);
 
     createCopyClickEvent(liNode, iNodeClassName);
@@ -88,13 +99,14 @@ function createIconListContainer(iconList) {
 
 function fetchAssets() {
   const link2 = document.getElementsByTagName('link')[0];
-  link2.href = '/css/iconfont-web.css';
+  const href = link2.href.split(link2.baseURI)[1];
+  link2.href = href;
 }
 
 function createCopyClickEvent(node, text) {
   node.onclick = function() {
     copyText(text, function() {
-      console.log('复制成功');
+      Toast(`复制 ${text} 成功至剪切板`);
     });
   };
 }
