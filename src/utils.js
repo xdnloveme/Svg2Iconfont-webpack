@@ -42,8 +42,18 @@ const mkdirAsync = path => {
   });
 };
 
+function isPainObject(o) {
+  return (
+    o &&
+    // 排除 boolean/string/number/function 等
+    Object.prototype.toString.call(o) === '[object Object]' &&
+    'isPrototypeOf' in o
+  );
+}
+
 module.exports = {
   readDirAsync,
   readFileAsync,
   mkdirAsync,
+  isPainObject,
 };
