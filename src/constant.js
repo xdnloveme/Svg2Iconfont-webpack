@@ -7,6 +7,13 @@ const DEFAULT_OUTPUT = {
   cssFileName: 'iconfont-web',
 };
 
+// default font options
+const DEFAULT_FONT_OPTIONS = {
+  cssPrefix: 'iconfont',
+  fontSize: 32,
+  fontFamily: 'iconfont',
+}
+
 module.exports = {
   // max unicode value
   MAX_UNICODE_NUM: 1048576,
@@ -20,12 +27,8 @@ module.exports = {
   DEFAULT_OPTIONS: {
     assetsPath: resolvePWD('./src/assets'),
     output: DEFAULT_OUTPUT,
+    fontOptions: DEFAULT_FONT_OPTIONS,
     preview: false,
   },
-  // default font options
-  DEFAULT_FONT_OPTIONS: {
-    cssPrefix: 'iconfont',
-    fontSize: 32,
-    fontFamily: 'iconfont',
-  },
+  DEFAULT_FONT_OPTIONS,
 };
