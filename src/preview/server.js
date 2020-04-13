@@ -105,7 +105,7 @@ module.exports = class Server extends EventEmitter {
     if (this.wss) {
       this.wss.clients.forEach(function each(client) {
         if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify(payload), 22);
+          client.send(JSON.stringify(payload));
         }
       });
     }
@@ -123,7 +123,11 @@ module.exports = class Server extends EventEmitter {
     };
 
     this.compiler.apply(new AddAssetsPlugins(fileList));
-    this.context.previewServer.send(this.context.iconList);
+
+    this.context.previewServer.send({
+      iconList: this.context.iconList,
+      pluginOptions: this.context.pluginOptions,
+    });
 
     this.middleware.invalidate();
   }

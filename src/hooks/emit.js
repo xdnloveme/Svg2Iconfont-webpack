@@ -4,7 +4,7 @@ const fontOutput = require('../core/fontOutput');
 const fontCssOutput = require('../core/fontCssOutput');
 
 module.exports = pluginOptions => {
-  return async function(compilation) {
+  return function(compilation) {
     const context = this;
     try {
       const { output } = pluginOptions;
