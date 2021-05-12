@@ -26,7 +26,7 @@
     "core-js": "^3.6.4",
     "font-carrier": "^0.2.0",
     "jest": "^25.2.3",
-    "postcss": "^7.0.27",
+    "postcss": "^8.2.10",
     "postcss-js": "^2.0.3"
   },
   "keywords": [
